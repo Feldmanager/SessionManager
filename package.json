@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "cookie-parser": "^1.4.5",
+    "crypto": "^1.0.1",
     "node": "^14.13.0"
   },
   "devDependencies": {},
