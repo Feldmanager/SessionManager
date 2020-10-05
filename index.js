@@ -14,11 +14,9 @@ class UserValidator{
         var fullString = this.mail + SECRET_KEY
         var hash = crypto.createHash('sha256').update(fullString).digest('base64');
         if(hash === this.hashFromUser){
-            //return next()
-            return true
+            return next()
         }else if(hash.substring(0, hash.length - 1) === this.hashFromUser){
-            //return next()
-            return true
+            return next()
         }else{
             return err
         }
@@ -26,8 +24,8 @@ class UserValidator{
 }
 
 const validateUser = (req, err, next) => {
-    //var cookies = req.headers.cookie.split('; ');
-    var cookies = ['token=WdZwPf/g6VFUsg5iBvcrT85V1PPntrKKFUWOfX41Rr0=', 'mail=dar', 'groupIds=[]']
+    var cookies = req.headers.cookie.split('; ');
+    //var cookies = ['token=WdZwPf/g6VFUsg5iBvcrT85V1PPntrKKFUWOfX41Rr0=', 'mail=dar', 'groupIds=[]']
     const parsedCookies = {};
     cookies.forEach(rawCookie=>{
         const parsedCookie = rawCookie.split('=');
@@ -37,8 +35,8 @@ const validateUser = (req, err, next) => {
     return userValidator.validateHash(err, next)
 }
 
-// module.exports = {
-//     validateUser
-// }
+module.exports = {
+    validateUser
+}
 
-console.log(validateUser("", "Error", ""))
+//console.log(validateUser("", "Error", ""))
