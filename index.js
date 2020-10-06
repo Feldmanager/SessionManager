@@ -10,27 +10,28 @@ class UserValidator{
         this.groupIds = groupIds
     }
 
-    validateHash(err, next){
+    validateToken(err, next){
         //var hash = crypto.createHash('sha256').update(fullString).digest('base64');
         var token = jwt.sign(this.username, SECRET_KEY);
         if(token === this.hashFromUser){
             return next()
+            // return true
         }else{
             return err
         }
     }
 }
 
-const validateUser = (req, err, next) => {
+const validateUser = (err, req, res, next) => {
     var cookies = req.headers.cookie.split('; ');
-    //var cookies = ['token=eyJhbGciOiJIUzI1NiJ9.ZGFy.dKB9cPk9Xl74eHLKKLQwlXYT4T4ZxORXxKUuIRkdWdE', 'mail=dar', 'groupIds=[]']
+    // var cookies = ['token=eyJhbGciOiJIUzI1NiJ9.ZGFy.dKB9cPk9Xl74eHLKKLQwlXYT4T4ZxORXxKUuIRkdWdE', 'username=dar', 'groupIds=[]']
     const parsedCookies = {};
     cookies.forEach(rawCookie=>{
         const parsedCookie = rawCookie.split('=');
          parsedCookies[parsedCookie[0]] = parsedCookie[1];
     });
-    var userValidator = new UserValidator(parsedCookies['token'], parsedCookies['mail'], parsedCookies['groupIds'])
-    return userValidator.validateHash(err, next)
+    var userValidator = new UserValidator(parsedCookies['token'], parsedCookies['username'], parsedCookies['groupIds'])
+    return userValidator.validateToken(err, next)
 }
 
 module.exports = {
