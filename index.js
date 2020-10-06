@@ -1,4 +1,4 @@
-const SECRET_KEY = "#$DarNach"
+const SECRET_KEY = "#$BenGay"
 
 //var crypto = require('crypto');
 const jwt = require("jsonwebtoken");
