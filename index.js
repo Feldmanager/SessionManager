@@ -4,18 +4,15 @@ const SECRET_KEY = "#$BenGay"
 const jwt = require("jsonwebtoken");
 
 class UserValidator{
-    constructor(hashFromUser, username, groupIds){
+    constructor(hashFromUser, username){
         this.hashFromUser = hashFromUser
         this.username = username
-        this.groupIds = groupIds
     }
 
-    validateToken(err, next){
-        //var hash = crypto.createHash('sha256').update(fullString).digest('base64');
+    validateToken(err, req, next){
         var token = jwt.sign(this.username, SECRET_KEY);
         if(token === this.hashFromUser){
             return next()
-            // return true
         }else{
             return err
         }
@@ -30,12 +27,10 @@ const validateUser = (err, req, res, next) => {
         const parsedCookie = rawCookie.split('=');
          parsedCookies[parsedCookie[0]] = parsedCookie[1];
     });
-    var userValidator = new UserValidator(parsedCookies['token'], parsedCookies['username'], parsedCookies['groupIds'])
+    var userValidator = new UserValidator(parsedCookies['token'], parsedCookies['username'])
     return userValidator.validateToken(err, next)
 }
 
 module.exports = {
     validateUser
 }
-
-//console.log(validateUser("", "Error", ""))
