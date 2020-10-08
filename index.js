@@ -9,25 +9,28 @@ class UserValidator{
         this.username = username
     }
 
-    validateToken(err, req, next){
+    validateToken(next){
         var token = jwt.sign(this.username, SECRET_KEY);
         if(token === this.hashFromUser){
             return next()
         }else{
-            return err
+            throw new Error()
         }
     }
 }
 
-const validateUser = (err, req, res, next) => {
+const validateUser = (req, res, next) => {
+    if (req.method === 'OPTIONS'){
+        return next();
+    }
     var cookies = req.headers.cookie.split('; ');
     let parsedCookies = {};
     cookies.forEach(rawCookie=>{
-        const parsedCookie = rawCookie.split('=');
+        let parsedCookie = rawCookie.split('=');
          parsedCookies[parsedCookie[0]] = parsedCookie[1];
     });
-    var userValidator = new UserValidator(parsedCookies['token'], parsedCookies['username'])
-    return userValidator.validateToken(err, next)
+    let userValidator = new UserValidator(parsedCookies['token'], parsedCookies['username'])
+    return userValidator.validateToken(next)
 }
 
 module.exports = {
