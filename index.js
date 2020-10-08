@@ -21,8 +21,7 @@ class UserValidator{
 
 const validateUser = (err, req, res, next) => {
     var cookies = req.headers.cookie.split('; ');
-    // var cookies = ['token=eyJhbGciOiJIUzI1NiJ9.ZGFy.dKB9cPk9Xl74eHLKKLQwlXYT4T4ZxORXxKUuIRkdWdE', 'username=dar', 'groupIds=[]']
-    const parsedCookies = {};
+    let parsedCookies = {};
     cookies.forEach(rawCookie=>{
         const parsedCookie = rawCookie.split('=');
          parsedCookies[parsedCookie[0]] = parsedCookie[1];
